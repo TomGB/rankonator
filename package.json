@@ -1,0 +1,16 @@
+{
+  "name": "user-sort",
+  "version": "0.0.1",
+  "description": "",
+  "main": "public/index.html",
+  "scripts": {
+    "build": "browserify src/app.js -o public/bundle.js",
+    "watch": "watchify src/app.js -o public/bundle.js"
+  },
+  "author": "Tom Banister",
+  "license": "ISC",
+  "dev-dependencies": {
+    "watchify": "^3.11.1",
+    "browserify": "^16.2.3"
+  }
+}
