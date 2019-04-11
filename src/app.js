@@ -28,6 +28,16 @@ const start = async () => {
 
     answerOne.addEventListener("click", a1ClickListener);
     answerTwo.addEventListener("click", a2ClickListener);
+    document.addEventListener('keypress', ({ key }) => {
+      if (key === '1') {
+        a1ClickListener()
+        return
+      }
+      if (key === '2') {
+        a2ClickListener()
+        return
+      }
+    })
   });
 
 
