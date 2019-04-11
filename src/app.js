@@ -2,7 +2,7 @@ const start = async () => {
   const questionBox = document.getElementsByClassName('question')[0];
 
   const askUser = (item, pivot) => new Promise((resolve) => {
-    questionBox.innerHTML = "Which one is more important?"
+    questionBox.innerHTML = "<h2>Which of these should rank higher?<h2>"
 
     const answerOne = document.createElement("div")
     answerOne.classList.add('answer')
@@ -53,10 +53,12 @@ const start = async () => {
   };
 
   const goButton = document.getElementsByClassName('go')[0];
-  const listInput = document.getElementsByClassName('input')[0];
+  const listInput = document.getElementsByClassName('options-input')[0];
   const outputBox = document.getElementsByClassName('output')[0];
+  const inputArea = document.getElementsByClassName('input-area')[0];
 
   goButton.addEventListener("click", async () => {
+    inputArea.classList.add('hidden')
     const list = listInput.value.trim().split('\n')
     const listWithoutBlanks = list.filter((item) => item !== '')
     const sorted = await quickSort(listWithoutBlanks);

@@ -5,12 +5,15 @@
   "main": "public/index.html",
   "scripts": {
     "build": "browserify src/app.js -o public/bundle.js",
-    "watch": "watchify src/app.js -o public/bundle.js"
+    "watch": "watchify src/app.js -o public/bundle.js",
+    "deploy": "npm run build && git subtree push --prefix public origin gh-pages"
   },
   "author": "Tom Banister",
   "license": "ISC",
   "dev-dependencies": {
-    "watchify": "^3.11.1",
     "browserify": "^16.2.3"
+  },
+  "dependencies": {
+    "watchify": "^3.11.1"
   }
 }
