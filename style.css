@@ -1,4 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
 .answer {
-  border: red 1px solid;
+  border: #4CAF50 1px solid;
   padding: 10px;
+  margin: 20px;
+  height: calc(40% - 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.answer:hover {
+  border: #4CAF50 3px solid;
+}
+
+.options-input {
+  width: 400px;
+  height: 400px;
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.hidden {
+  display: none;
 }
