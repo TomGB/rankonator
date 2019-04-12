@@ -1,13 +1,49 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 let originalList
 let userActions = []
+let finished = false
+
+const keyListeners = {
+  cb1: () => {},
+  cb2: () => {}
+}
+
+const undoListener = {
+  cb: () => {}
+}
+
+const setupKeyListener = (cb1, cb2) => {
+  keyListeners.cb1 = cb1
+  keyListeners.cb2 = cb2
+}
+
+document.addEventListener('keypress', ({ key }) => {
+  if (key === '1') {
+    keyListeners.cb1()
+    return
+  }
+  if (key === '2') {
+    keyListeners.cb2()
+    return
+  }
+})
+
+const average = n => Math.floor(n * Math.log(n))
 
 const clone = input => JSON.parse(JSON.stringify(input))
+
+let undoButton
+
+const updateDom = () => {
+  undoButton.classList.add('hidden')
+  if (userActions.length) undoButton.classList.remove('hidden')
+}
 
 const start = async () => {
   const questionBox = document.getElementsByClassName('question')[0];
 
   const askUser = (item, pivot) => new Promise((resolve) => {
+    updateDom()
     questionBox.innerHTML = "<h2>Which of these should rank higher?<h2>"
 
     const answerOne = document.createElement("div")
@@ -20,8 +56,13 @@ const start = async () => {
     answerTwo.appendChild(document.createTextNode(pivot));
     questionBox.appendChild(answerTwo)
 
+    const progressBar = document.createElement("p")
+    progressBar.appendChild(document.createTextNode(`Estimated progress: ${userActions.length} / ${average(originalList.length)}`));
+    questionBox.appendChild(progressBar)
+
     const a1ClickListener = () => {
       userActions.push(true)
+      console.log(userActions)
       answerOne.remove()
       answerTwo.remove()
       resolve(true);
@@ -29,23 +70,29 @@ const start = async () => {
 
     const a2ClickListener = () => {
       userActions.push(false)
+      console.log(userActions)
       answerOne.remove()
       answerTwo.remove()
       resolve(false);
     }
 
-    answerOne.addEventListener("click", a1ClickListener);
-    answerTwo.addEventListener("click", a2ClickListener);
-    document.addEventListener('keypress', ({ key }) => {
-      if (key === '1') {
-        a1ClickListener()
-        return
-      }
-      if (key === '2') {
-        a2ClickListener()
-        return
-      }
-    })
+    answerOne.addEventListener('click', a1ClickListener);
+    answerTwo.addEventListener('click', a2ClickListener);
+    setupKeyListener(a1ClickListener, a2ClickListener)
+
+    undoListener.cb = async () => {
+      console.log('undo')
+      resolve('cancel')
+      userActions.pop()
+      console.log(userActions)
+      const sorted = await quickSort(clone(originalList), clone(userActions))
+      if (sorted === 'cancel') return
+
+      selectionArea.classList.add('hidden')
+      questionBox.innerHTML = "";
+
+      outputBox.innerHTML = `<h2>Ranked order</h2> ${sorted.join('<br>')}`
+    }
   });
 
   const quickSort = async (input, replayActions) => {
@@ -61,27 +108,35 @@ const start = async () => {
     for (let i = input.length - 1; i >= 0; i--) {
       let response
 
-      if (replayActions && !replayActions.length) {
+      if (!replayActions) {
+        response = await askUser(input[i], pivot);
+      } else if (replayActions && replayActions.length === 0) {
         response = await askUser(input[i], pivot);
         stopReplay = true
-      } else if (replayActions && replayActions.length) {
+      } else if (replayActions && replayActions.length > 0) {
         response = replayActions.shift();
-      } else {
-        response = await askUser(input[i], pivot);
       }
 
-      if (response) {
+      if (response === 'cancel') {
+        return 'cancel'
+      } else if (response) {
         less.push(input[i]);
       } else {
         greater.push(input[i]);
       }
     }
 
-    return [].concat(await quickSort(less, stopReplay && replayActions), pivot, await quickSort(greater, stopReplay && replayActions));
+    const leftResult = await quickSort(less, stopReplay && replayActions)
+    if (leftResult === 'cancel') return 'cancel'
+
+    const rightResult = await quickSort(greater, stopReplay && replayActions)
+    if (rightResult === 'cancel') return 'cancel'
+
+    return [].concat(leftResult, pivot, rightResult);
   };
 
   const goButton = document.getElementsByClassName('go')[0];
-  const undoButton = document.getElementsByClassName('undo')[0];
+  undoButton = document.getElementsByClassName('undo')[0];
   const listInput = document.getElementsByClassName('options-input')[0];
   const outputBox = document.getElementsByClassName('output')[0];
   const inputArea = document.getElementsByClassName('input-area')[0];
@@ -94,6 +149,7 @@ const start = async () => {
     const listWithoutBlanks = list.filter((item) => item !== '')
     originalList = listWithoutBlanks
     const sorted = await quickSort(clone(listWithoutBlanks))
+    if (sorted === 'cancel') return
 
     selectionArea.classList.add('hidden')
     questionBox.innerHTML = "";
@@ -102,14 +158,7 @@ const start = async () => {
   })
 
   undoButton.addEventListener("click", async () => {
-    userActions.pop()
-    console.log(userActions)
-    const sorted = await quickSort(clone(originalList), clone(userActions))
-
-    selectionArea.classList.add('hidden')
-    questionBox.innerHTML = "";
-
-    outputBox.innerHTML = `<h2>Ranked order</h2> ${sorted.join('<br>')}`
+    undoListener.cb()
   })
 }
 
