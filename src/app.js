@@ -1,3 +1,8 @@
+let originalList
+let userActions = []
+
+const clone = input => JSON.parse(JSON.stringify(input))
+
 const start = async () => {
   const questionBox = document.getElementsByClassName('question')[0];
 
@@ -15,12 +20,14 @@ const start = async () => {
     questionBox.appendChild(answerTwo)
 
     const a1ClickListener = () => {
+      userActions.push(true)
       answerOne.remove()
       answerTwo.remove()
       resolve(true);
     }
 
     const a2ClickListener = () => {
+      userActions.push(false)
       answerOne.remove()
       answerTwo.remove()
       resolve(false);
@@ -40,8 +47,7 @@ const start = async () => {
     })
   });
 
-
-  const quickSort = async (input) => {
+  const quickSort = async (input, replayActions) => {
     if (input.length <= 1) {
       return input;
     }
@@ -49,8 +55,19 @@ const start = async () => {
 
     const pivot = input.shift();
 
+    let stopReplay = false
+
     for (let i = input.length - 1; i >= 0; i--) {
-      const response = await askUser(input[i], pivot);
+      let response
+
+      if (replayActions && !replayActions.length) {
+        response = await askUser(input[i], pivot);
+        stopReplay = true
+      } else if (replayActions && replayActions.length) {
+        response = replayActions.shift();
+      } else {
+        response = await askUser(input[i], pivot);
+      }
 
       if (response) {
         less.push(input[i]);
@@ -59,23 +76,39 @@ const start = async () => {
       }
     }
 
-    return [].concat(await quickSort(less), pivot, await quickSort(greater));
+    return [].concat(await quickSort(less, stopReplay && replayActions), pivot, await quickSort(greater, stopReplay && replayActions));
   };
 
   const goButton = document.getElementsByClassName('go')[0];
+  const undoButton = document.getElementsByClassName('undo')[0];
   const listInput = document.getElementsByClassName('options-input')[0];
   const outputBox = document.getElementsByClassName('output')[0];
   const inputArea = document.getElementsByClassName('input-area')[0];
+  const selectionArea = document.getElementsByClassName('selection-area')[0];
 
   goButton.addEventListener("click", async () => {
     inputArea.classList.add('hidden')
+    selectionArea.classList.remove('hidden')
     const list = listInput.value.trim().split('\n')
     const listWithoutBlanks = list.filter((item) => item !== '')
-    const sorted = await quickSort(listWithoutBlanks);
+    originalList = listWithoutBlanks
+    const sorted = await quickSort(clone(listWithoutBlanks))
 
+    selectionArea.classList.add('hidden')
     questionBox.innerHTML = "";
 
-    outputBox.innerHTML = sorted.join('<br>')
+    outputBox.innerHTML = `<h2>Ranked order</h2> ${sorted.join('<br>')}`
+  })
+
+  undoButton.addEventListener("click", async () => {
+    userActions.pop()
+    console.log(userActions)
+    const sorted = await quickSort(clone(originalList), clone(userActions))
+
+    selectionArea.classList.add('hidden')
+    questionBox.innerHTML = "";
+
+    outputBox.innerHTML = `<h2>Ranked order</h2> ${sorted.join('<br>')}`
   })
 }
 
