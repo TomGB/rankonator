@@ -3,6 +3,38 @@ const start = async () => {
     const { setReplay, setOriginalList } = require('./askUser')
 
     const quickSort = require('./quickSort')
+    require('./bookmarkButton')()
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const urlData = JSON.parse(urlParams.get('data'))
+
+    const integrationArea = document.getElementsByClassName('integration-area')[0]
+    const listInput = document.getElementsByClassName('options-input')[0];
+
+    if (urlData && urlData.length > 0) {
+        const subTitle = document.createElement('h3')
+        subTitle.appendChild(document.createTextNode('Select your list'))
+        integrationArea.appendChild(subTitle)
+
+        urlData.forEach(({ name, items }) => {
+            const listSelectionButton = document.createElement('a')
+            listSelectionButton.classList.add('button')
+            listSelectionButton.appendChild(document.createTextNode(name))
+            integrationArea.appendChild(listSelectionButton)
+
+            listSelectionButton.addEventListener('mouseover', () => {
+                listInput.setAttribute('placeholder', items.join('\n'))
+            })
+
+            listSelectionButton.addEventListener('mouseout', () => {
+                listInput.setAttribute('placeholder', '')
+            })
+
+            listSelectionButton.addEventListener('click', () => {
+                listInput.value = items.join('\n')
+            })
+         })
+    }
 
     let originalList
 
@@ -11,9 +43,8 @@ const start = async () => {
     const questionBox = document.getElementsByClassName('question')[0];
 
     const goButton = document.getElementsByClassName('go')[0];
-    const listInput = document.getElementsByClassName('options-input')[0];
-    const outputBox = document.getElementsByClassName('output')[0];
     const inputArea = document.getElementsByClassName('input-area')[0];
+    const outputBox = document.getElementsByClassName('output')[0];
     const selectionArea = document.getElementsByClassName('selection-area')[0];
 
     goButton.addEventListener("click", async () => {
@@ -47,7 +78,7 @@ const start = async () => {
 
 window.onload = start
 
-},{"./askUser":2,"./quickSort":3}],2:[function(require,module,exports){
+},{"./bookmarkButton":3,"./quickSort":4}],2:[function(require,module,exports){
 const undoButton = document.getElementsByClassName('undo')[0];
 const questionBox = document.getElementsByClassName('question')[0];
 
@@ -164,7 +195,34 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
 module.exports = { askUser, setReplay, setOriginalList }
 
 },{}],3:[function(require,module,exports){
-const { askUser } = require('./askUser')
+const bookmarklet = require('../trello/bookmarklet.json')
+
+const copyToClipboard = str => {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+};
+
+const bookmarkButton = () => {
+    const button = document.getElementsByClassName('trello-bookmark')[0]
+    const clipboardMessage = document.getElementsByClassName('clipboard-message')[0]
+
+    button.addEventListener('click', () => {
+        copyToClipboard(bookmarklet)
+        clipboardMessage.classList.remove('hidden')
+    })
+}
+
+module.exports = bookmarkButton
+
+},{"../trello/bookmarklet.json":5}],4:[function(require,module,exports){
+const askUser = require('./askUser')
 
 const quickSort = async input => {
     if (input.length <= 1) {
@@ -192,4 +250,7 @@ const quickSort = async input => {
 
 module.exports = quickSort
 
-},{"./askUser":2}]},{},[1]);
+},{"./askUser":2}],5:[function(require,module,exports){
+module.exports="javascript:{(function(){function t(e,n,s){function a(m,o){if(!n[m]){if(!e[m]){var r=\"function\"==typeof require&&require;if(!o&&r)return r(m,!0);if(l)return l(m,!0);var i=new Error(\"Cannot find module '\"+m+\"'\");throw i.code=\"MODULE_NOT_FOUND\",i}var u=n[m]={exports:{}};e[m][0].call(u.exports,function(t){var n=e[m][1][t];return a(n||t)},u,u.exports,t,e,n,s)}return n[m].exports}for(var l=\"function\"==typeof require&&require,m=0;m<s.length;m++)a(s[m]);return a}return t})()({1:[function(t,e,n){let s=()=>{let t=Array.from(document.getElementsByClassName('js-list-content')),e=t.map(t=>({name:t.getElementsByClassName('list-header-name')[0].value,items:Array.from(t.getElementsByClassName('list-card-title')).map(({innerText:t})=>t)})),n='https://tomgb.github.io/user-sort/';window.open(n+'?data='+encodeURI(JSON.stringify(e)))};s()},{}]},{},[1])\n};void(0);"
+
+},{}]},{},[1]);
