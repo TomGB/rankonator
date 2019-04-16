@@ -9,6 +9,7 @@ const start = async () => {
 
     const integrationArea = document.getElementsByClassName('integration-area')[0]
     const listInput = document.getElementsByClassName('options-input')[0];
+    const undoButton = document.getElementsByClassName('undo')[0];
 
     if (urlData && urlData.length > 0) {
         const subTitle = document.createElement('h3')
@@ -44,11 +45,9 @@ const start = async () => {
     const goButton = document.getElementsByClassName('go')[0];
     const inputArea = document.getElementsByClassName('input-area')[0];
     const outputBox = document.getElementsByClassName('output')[0];
-    const selectionArea = document.getElementsByClassName('selection-area')[0];
 
     goButton.addEventListener("click", async () => {
         inputArea.classList.add('hidden')
-        selectionArea.classList.remove('hidden')
         const list = listInput.value.trim().split('\n')
         const listWithoutBlanks = list.filter((item) => item !== '')
         originalList = listWithoutBlanks
@@ -68,7 +67,7 @@ const start = async () => {
             }
         } while(!finished)
 
-        selectionArea.classList.add('hidden')
+        undoButton.classList.add('hidden')
         questionBox.innerHTML = "";
 
         outputBox.innerHTML = `<h2>Ranked order</h2> ${sorted.join('<br>')}`

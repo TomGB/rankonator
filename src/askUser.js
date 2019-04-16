@@ -39,8 +39,8 @@ undoButton.addEventListener("click", async () => {
 })
 
 const updateDom = (item, pivot) => {
-    undoButton.classList.add('disabled')
-    if (userActions.length) undoButton.classList.remove('disabled')
+    undoButton.classList.add('hidden')
+    if (userActions.length) undoButton.classList.remove('hidden')
 
     questionBox.innerHTML = "<h2>Which of these should rank higher?<h2>"
 
