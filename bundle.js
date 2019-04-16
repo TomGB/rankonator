@@ -6,10 +6,14 @@ const start = async () => {
     require('./bookmarkButton')()
 
     const urlParams = new URLSearchParams(window.location.search)
-    const urlData = JSON.parse(urlParams.get('data'))
+    const jsonData = urlParams.get('data')
+    console.log(jsonData)
+    const urlData = JSON.parse(jsonData)
+    console.log(urlData)
 
     const integrationArea = document.getElementsByClassName('integration-area')[0]
     const listInput = document.getElementsByClassName('options-input')[0];
+    const undoButton = document.getElementsByClassName('undo')[0];
 
     if (urlData && urlData.length > 0) {
         const subTitle = document.createElement('h3')
@@ -45,11 +49,9 @@ const start = async () => {
     const goButton = document.getElementsByClassName('go')[0];
     const inputArea = document.getElementsByClassName('input-area')[0];
     const outputBox = document.getElementsByClassName('output')[0];
-    const selectionArea = document.getElementsByClassName('selection-area')[0];
 
     goButton.addEventListener("click", async () => {
         inputArea.classList.add('hidden')
-        selectionArea.classList.remove('hidden')
         const list = listInput.value.trim().split('\n')
         const listWithoutBlanks = list.filter((item) => item !== '')
         originalList = listWithoutBlanks
@@ -69,7 +71,7 @@ const start = async () => {
             }
         } while(!finished)
 
-        selectionArea.classList.add('hidden')
+        undoButton.classList.add('hidden')
         questionBox.innerHTML = "";
 
         outputBox.innerHTML = `<h2>Ranked order</h2> ${sorted.join('<br>')}`
@@ -254,5 +256,5 @@ const quickSort = async input => {
 module.exports = quickSort
 
 },{"./askUser":2}],5:[function(require,module,exports){
-module.exports="javascript:{(function(){function t(e,n,s){function a(m,o){if(!n[m]){if(!e[m]){var r=\"function\"==typeof require&&require;if(!o&&r)return r(m,!0);if(l)return l(m,!0);var i=new Error(\"Cannot find module '\"+m+\"'\");throw i.code=\"MODULE_NOT_FOUND\",i}var u=n[m]={exports:{}};e[m][0].call(u.exports,function(t){var n=e[m][1][t];return a(n||t)},u,u.exports,t,e,n,s)}return n[m].exports}for(var l=\"function\"==typeof require&&require,m=0;m<s.length;m++)a(s[m]);return a}return t})()({1:[function(t,e,n){let s=()=>{let t=Array.from(document.getElementsByClassName('js-list-content')),e=t.map(t=>({name:t.getElementsByClassName('list-header-name')[0].value,items:Array.from(t.getElementsByClassName('list-card-title')).map(({innerText:t})=>t)})),n='https://tomgb.github.io/user-sort/';window.open(n+'?data='+encodeURI(JSON.stringify(e)))};s()},{}]},{},[1])\n};void(0);"
+module.exports="javascript:{(function(){function t(e,n,s){function a(m,o){if(!n[m]){if(!e[m]){var r=\"function\"==typeof require&&require;if(!o&&r)return r(m,!0);if(l)return l(m,!0);var i=new Error(\"Cannot find module '\"+m+\"'\");throw i.code=\"MODULE_NOT_FOUND\",i}var u=n[m]={exports:{}};e[m][0].call(u.exports,function(t){var n=e[m][1][t];return a(n||t)},u,u.exports,t,e,n,s)}return n[m].exports}for(var l=\"function\"==typeof require&&require,m=0;m<s.length;m++)a(s[m]);return a}return t})()({1:[function(t,e,n){let s=()=>{let t=Array.from(document.getElementsByClassName('js-list-content')),e=t.map(t=>({name:t.getElementsByClassName('list-header-name')[0].value,items:Array.from(t.getElementsByClassName('list-card-title')).map(({innerText:t})=>t)})),n='https://tomgb.github.io/user-sort/';window.open(n+'?data='+encodeURIComponent(JSON.stringify(e)))};s()},{}]},{},[1])\n};void(0);"
 },{}]},{},[1]);
