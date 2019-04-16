@@ -32,19 +32,16 @@ document.addEventListener('keypress', ({ key }) => {
     }
 })
 
-const userActions = []
+let userActions = []
 
 undoButton.addEventListener("click", async () => {
     undoListener.cb()
 })
 
-const updateDom = () => {
-    undoButton.classList.add('hidden')
-    if (userActions.length) undoButton.classList.remove('hidden')
-}
+const updateDom = (item, pivot) => {
+    undoButton.classList.add('disabled')
+    if (userActions.length) undoButton.classList.remove('disabled')
 
-const askUser = (item, pivot) => new Promise((resolve, reject) => {
-    updateDom()
     questionBox.innerHTML = "<h2>Which of these should rank higher?<h2>"
 
     const answerOne = document.createElement("div")
@@ -57,23 +54,51 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
     answerTwo.appendChild(document.createTextNode(pivot));
     questionBox.appendChild(answerTwo)
 
-    // const progressBar = document.createElement("p")
-    // progressBar.appendChild(document.createTextNode(`Estimated progress: ${userActions.length} / ${average(originalList.length)}`));
-    // questionBox.appendChild(progressBar)
+    return { answerOne, answerTwo }
+}
+
+let replayActions = []
+
+const setReplay = () => {
+    replayActions = clone(userActions)
+    replayActions.pop()
+    userActions = []
+}
+
+let originalList = []
+
+const setOriginalList = input => {
+    originalList = input
+}
+
+const askUser = (item, pivot) => new Promise((resolve, reject) => {
+    if (replayActions.length) {
+        const nextAction = replayActions.shift()
+        console.log('ra', replayActions)
+        userActions.push(nextAction)
+        console.log('history', userActions)
+        resolve(nextAction)
+    }
+
+    const { answerOne, answerTwo } = updateDom(item, pivot)
+
+    const progressBar = document.createElement("p")
+    progressBar.appendChild(document.createTextNode(`Estimated progress: ${userActions.length} / ${average(originalList.length)}`));
+    questionBox.appendChild(progressBar)
 
     const a1ClickListener = () => {
         userActions.push(true)
-        console.log(userActions)
         answerOne.remove()
         answerTwo.remove()
+        console.log('history', userActions)
         resolve(true);
     }
 
     const a2ClickListener = () => {
         userActions.push(false)
-        console.log(userActions)
         answerOne.remove()
         answerTwo.remove()
+        console.log('history', userActions)
         resolve(false);
     }
 
@@ -86,4 +111,4 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
     }
 });
 
-module.exports = askUser
+module.exports = { askUser, setReplay, setOriginalList }

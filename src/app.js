@@ -1,4 +1,6 @@
 const start = async () => {
+    const { setReplay, setOriginalList } = require('./askUser')
+
     const quickSort = require('./quickSort')
 
     let originalList
@@ -19,6 +21,7 @@ const start = async () => {
         const list = listInput.value.trim().split('\n')
         const listWithoutBlanks = list.filter((item) => item !== '')
         originalList = listWithoutBlanks
+        setOriginalList(originalList)
 
         let finished = false
         let sorted
@@ -30,6 +33,7 @@ const start = async () => {
                 finished = true
             } catch (e) {
                 console.log(e)
+                setReplay()
             }
         } while(!finished)
 
