@@ -6,7 +6,7 @@
   border: #4CAF50 1px solid;
   padding: 10px;
   margin: 20px;
-  height: calc(40% - 20px);
+  height: calc(35% - 20px);
   display: flex;
   flex-direction: column;
   justify-content: center;
