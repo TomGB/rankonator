@@ -1,5 +1,6 @@
 const start = async () => {
     const quickSort = require('./quickSort')
+    require('./bookmarkButton')()
 
     const urlParams = new URLSearchParams(window.location.search)
     const urlData = JSON.parse(urlParams.get('data'))

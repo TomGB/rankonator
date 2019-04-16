@@ -1,6 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const start = async () => {
     const quickSort = require('./quickSort')
+    require('./bookmarkButton')()
 
     const urlParams = new URLSearchParams(window.location.search)
     const urlData = JSON.parse(urlParams.get('data'))
@@ -73,7 +74,7 @@ const start = async () => {
 
 window.onload = start
 
-},{"./quickSort":3}],2:[function(require,module,exports){
+},{"./bookmarkButton":3,"./quickSort":4}],2:[function(require,module,exports){
 const undoButton = document.getElementsByClassName('undo')[0];
 const questionBox = document.getElementsByClassName('question')[0];
 
@@ -165,6 +166,33 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
 module.exports = askUser
 
 },{}],3:[function(require,module,exports){
+const bookmarklet = require('../trello/bookmarklet.json')
+
+const copyToClipboard = str => {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+};
+
+const bookmarkButton = () => {
+    const button = document.getElementsByClassName('trello-bookmark')[0]
+    const clipboardMessage = document.getElementsByClassName('clipboard-message')[0]
+
+    button.addEventListener('click', () => {
+        copyToClipboard(bookmarklet)
+        clipboardMessage.classList.remove('hidden')
+    })
+}
+
+module.exports = bookmarkButton
+
+},{"../trello/bookmarklet.json":5}],4:[function(require,module,exports){
 const askUser = require('./askUser')
 
 const quickSort = async input => {
@@ -193,4 +221,7 @@ const quickSort = async input => {
 
 module.exports = quickSort
 
-},{"./askUser":2}]},{},[1]);
+},{"./askUser":2}],5:[function(require,module,exports){
+module.exports="javascript:{(function(){function t(e,n,s){function a(m,o){if(!n[m]){if(!e[m]){var r=\"function\"==typeof require&&require;if(!o&&r)return r(m,!0);if(l)return l(m,!0);var i=new Error(\"Cannot find module '\"+m+\"'\");throw i.code=\"MODULE_NOT_FOUND\",i}var u=n[m]={exports:{}};e[m][0].call(u.exports,function(t){var n=e[m][1][t];return a(n||t)},u,u.exports,t,e,n,s)}return n[m].exports}for(var l=\"function\"==typeof require&&require,m=0;m<s.length;m++)a(s[m]);return a}return t})()({1:[function(t,e,n){let s=()=>{let t=Array.from(document.getElementsByClassName('js-list-content')),e=t.map(t=>({name:t.getElementsByClassName('list-header-name')[0].value,items:Array.from(t.getElementsByClassName('list-card-title')).map(({innerText:t})=>t)})),n='https://tomgb.github.io/user-sort/';window.open(n+'?data='+encodeURI(JSON.stringify(e)))};s()},{}]},{},[1])\n};void(0);"
+
+},{}]},{},[1]);
