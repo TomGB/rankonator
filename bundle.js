@@ -1,5 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const start = async () => {
+    const { setReplay, setOriginalList } = require('./askUser')
+
     const quickSort = require('./quickSort')
 
     let originalList
@@ -20,6 +22,7 @@ const start = async () => {
         const list = listInput.value.trim().split('\n')
         const listWithoutBlanks = list.filter((item) => item !== '')
         originalList = listWithoutBlanks
+        setOriginalList(originalList)
 
         let finished = false
         let sorted
@@ -31,6 +34,7 @@ const start = async () => {
                 finished = true
             } catch (e) {
                 console.log(e)
+                setReplay()
             }
         } while(!finished)
 
@@ -43,7 +47,7 @@ const start = async () => {
 
 window.onload = start
 
-},{"./quickSort":3}],2:[function(require,module,exports){
+},{"./askUser":2,"./quickSort":3}],2:[function(require,module,exports){
 const undoButton = document.getElementsByClassName('undo')[0];
 const questionBox = document.getElementsByClassName('question')[0];
 
@@ -78,19 +82,16 @@ document.addEventListener('keypress', ({ key }) => {
     }
 })
 
-const userActions = []
+let userActions = []
 
 undoButton.addEventListener("click", async () => {
     undoListener.cb()
 })
 
-const updateDom = () => {
-    undoButton.classList.add('hidden')
-    if (userActions.length) undoButton.classList.remove('hidden')
-}
+const updateDom = (item, pivot) => {
+    undoButton.classList.add('disabled')
+    if (userActions.length) undoButton.classList.remove('disabled')
 
-const askUser = (item, pivot) => new Promise((resolve, reject) => {
-    updateDom()
     questionBox.innerHTML = "<h2>Which of these should rank higher?<h2>"
 
     const answerOne = document.createElement("div")
@@ -103,23 +104,51 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
     answerTwo.appendChild(document.createTextNode(pivot));
     questionBox.appendChild(answerTwo)
 
-    // const progressBar = document.createElement("p")
-    // progressBar.appendChild(document.createTextNode(`Estimated progress: ${userActions.length} / ${average(originalList.length)}`));
-    // questionBox.appendChild(progressBar)
+    return { answerOne, answerTwo }
+}
+
+let replayActions = []
+
+const setReplay = () => {
+    replayActions = clone(userActions)
+    replayActions.pop()
+    userActions = []
+}
+
+let originalList = []
+
+const setOriginalList = input => {
+    originalList = input
+}
+
+const askUser = (item, pivot) => new Promise((resolve, reject) => {
+    if (replayActions.length) {
+        const nextAction = replayActions.shift()
+        console.log('ra', replayActions)
+        userActions.push(nextAction)
+        console.log('history', userActions)
+        resolve(nextAction)
+    }
+
+    const { answerOne, answerTwo } = updateDom(item, pivot)
+
+    const progressBar = document.createElement("p")
+    progressBar.appendChild(document.createTextNode(`Estimated progress: ${userActions.length} / ${average(originalList.length)}`));
+    questionBox.appendChild(progressBar)
 
     const a1ClickListener = () => {
         userActions.push(true)
-        console.log(userActions)
         answerOne.remove()
         answerTwo.remove()
+        console.log('history', userActions)
         resolve(true);
     }
 
     const a2ClickListener = () => {
         userActions.push(false)
-        console.log(userActions)
         answerOne.remove()
         answerTwo.remove()
+        console.log('history', userActions)
         resolve(false);
     }
 
@@ -132,10 +161,10 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
     }
 });
 
-module.exports = askUser
+module.exports = { askUser, setReplay, setOriginalList }
 
 },{}],3:[function(require,module,exports){
-const askUser = require('./askUser')
+const { askUser } = require('./askUser')
 
 const quickSort = async input => {
     if (input.length <= 1) {
