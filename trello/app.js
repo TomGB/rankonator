@@ -7,7 +7,7 @@ const start = () => {
 
     const baseUrl = 'https://tomgb.github.io/user-sort/'
 
-    window.open(baseUrl + '?data=' + encodeURI(JSON.stringify(lists)))
+    window.open(baseUrl + '?data=' + encodeURIComponent(JSON.stringify(lists)))
 }
 
 start()

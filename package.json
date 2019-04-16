@@ -7,7 +7,8 @@
     "build": "browserify src/app.js -o public/bundle.js",
     "watch": "watchify src/app.js -o public/bundle.js",
     "deploy": "yarn build && git subtree push --prefix public origin gh-pages",
-    "trello:build": "browserify trello/app.js | squash > trello/bundle.js && ./trello/build.js"
+    "trello:build": "browserify trello/app.js | squash > trello/bundle.js && ./trello/build.js",
+    "serve": "serve ./public"
   },
   "author": "Tom Banister",
   "license": "ISC",
@@ -17,6 +18,7 @@
     "qs": "^6.7.0",
     "uglify-js": "^3.5.4",
     "watchify": "^3.11.1",
-    "yarn": "^1.15.2"
+    "yarn": "^1.15.2",
+    "serve": "^11.0.0"
   }
 }

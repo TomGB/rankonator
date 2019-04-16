@@ -5,7 +5,10 @@ const start = async () => {
     require('./bookmarkButton')()
 
     const urlParams = new URLSearchParams(window.location.search)
-    const urlData = JSON.parse(urlParams.get('data'))
+    const jsonData = urlParams.get('data')
+    console.log(jsonData)
+    const urlData = JSON.parse(jsonData)
+    console.log(urlData)
 
     const integrationArea = document.getElementsByClassName('integration-area')[0]
     const listInput = document.getElementsByClassName('options-input')[0];
