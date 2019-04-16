@@ -210,10 +210,13 @@ const copyToClipboard = str => {
 };
 
 const bookmarkButton = () => {
-    const button = document.getElementsByClassName('trello-bookmark')[0]
+    const bookmarkLink = document.getElementsByClassName('trello-bookmark')[0]
+    bookmarkLink.setAttribute('href', bookmarklet)
+
+    const copyButton = document.getElementsByClassName('trello-bookmark-copy')[0]
     const clipboardMessage = document.getElementsByClassName('clipboard-message')[0]
 
-    button.addEventListener('click', () => {
+    copyButton.addEventListener('click', () => {
         copyToClipboard(bookmarklet)
         clipboardMessage.classList.remove('hidden')
     })
