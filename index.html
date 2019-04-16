@@ -1,22 +1,47 @@
 <link rel="stylesheet" type="text/css" href='./style.css' />
 <script src='./bundle.js'></script>
-<h1>User ranking app</h1>
-<section class='input-area'>
-  <p>Add the Trello integration bookmark</p>
-  <p>Drag the link to your bookmarks bar</p>
-  <p>Then on a Trello board click the bookmark</p>
-  <a class='trello-bookmark'>Trello Sort</a>
-  <p>Create the bookmark manually by clicking copy</p>
-  <button class='trello-bookmark-copy'>Copy</button>
-  <p class='clipboard-message hidden'>Successfully copied</p>
-  <section class='integration-area'></section>
-  <h2>Input options separated by new lines</h2>
-  <textarea class='options-input'></textarea>
-  <br>
-  <button class='go button'>Sort</button>
-</section>
-<section class='selection-area hidden'>
-  <button class='undo button disabled'>undo</button>
-</section>
-<div class='question'></div>
-<div class='output'></div>
+<div class='main'>
+  <h1>The Rankonator</h1>
+  <section class='input-area'>
+    <p>
+      If you've ever found yourself ranking a list of options by hand,
+      <br>
+      you'll probably have done it by making a torturous string of
+      decisions comparing the importance of each item against the others.
+      <br>
+      The Rankonator will break down prioritisation into individual decisions, so there's less to hold in your head at once.
+      <br>
+      If you're ranking in your head, you're probably using something like an
+      <a href='https://www.toptal.com/developers/sorting-algorithms' target='_blank'>insertion or selection algorithm</a>.
+      <br>
+      The Rankonator uses the QuickSort algorithm, which should reduce the number of choices you have to make.
+    </p>
+    <section class='integration-area'></section>
+    <h2>Items to be ranked</h2>
+    <p>Put one item per line</p>
+    <textarea class='options-input'></textarea>
+    <br>
+    <br>
+    <button class='go button'>Rank</button>
+    <h3>Copying from Trello</h3>
+    <p>
+      To copy a list of items to rank from Trello, you can use a bookmarklet.
+      <br>
+      This is a small script that you save to your browser bookmarks.
+      <br>
+      To use the bookmarklet, open the Trello board you want to copy from and click the bookmark you created.
+    </p>
+    <p>Drag this link to your bookmarks bar</p>
+    <p>Then on a Trello board click the bookmark</p>
+    <a class='trello-bookmark'>Trello Sort</a>
+    <br>
+    <br>
+    <button class='trello-bookmark-copy button'>Copy the bookmarklet script</button>
+    <p class='clipboard-message hidden'>Copied! Now paste the script as the URL of a new bookmark</p>
+  </section>
+  <section class='selection-area'>
+    <button class='undo button hidden'>undo</button>
+  </section>
+  <div class='question'></div>
+  <div class='output'></div>
+</div>
