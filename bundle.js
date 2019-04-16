@@ -78,7 +78,7 @@ const start = async () => {
 
 window.onload = start
 
-},{"./bookmarkButton":3,"./quickSort":4}],2:[function(require,module,exports){
+},{"./askUser":2,"./bookmarkButton":3,"./quickSort":4}],2:[function(require,module,exports){
 const undoButton = document.getElementsByClassName('undo')[0];
 const questionBox = document.getElementsByClassName('question')[0];
 
@@ -222,7 +222,7 @@ const bookmarkButton = () => {
 module.exports = bookmarkButton
 
 },{"../trello/bookmarklet.json":5}],4:[function(require,module,exports){
-const askUser = require('./askUser')
+const { askUser } = require('./askUser')
 
 const quickSort = async input => {
     if (input.length <= 1) {
