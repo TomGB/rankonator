@@ -1,4 +1,4 @@
-const askUser = require('./askUser')
+const { askUser } = require('./askUser')
 
 const quickSort = async input => {
     if (input.length <= 1) {
