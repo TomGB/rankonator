@@ -15,7 +15,8 @@ const keyListeners = {
 }
 
 const undoListener = {
-    cb: () => { }
+    cb: () => { },
+    undoEnabled: false,
 }
 
 const setupKeyListener = (cb1, cb2) => {
@@ -39,6 +40,12 @@ let userActions = []
 undoButton.addEventListener("click", async () => {
     undoListener.cb()
 })
+
+window.onpopstate = () => {
+    if (undoListener.undoEnabled) {
+        undoListener.cb();
+    }
+};
 
 const updateDom = (item, pivot) => {
     undoButton.classList.add('hidden')
@@ -112,9 +119,15 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
     answerTwo.addEventListener('click', a2ClickListener);
     setupKeyListener(a1ClickListener, a2ClickListener)
 
+    if (!undoListener.undoEnabled) {
+        history.pushState(null, null, location.href);
+    }
+
+    undoListener.undoEnabled = true
     undoListener.cb = async () => {
         reject('undo')
     }
+
 });
 
 module.exports = { askUser, setReplay, setOriginalList }
