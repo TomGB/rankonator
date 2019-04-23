@@ -49,10 +49,21 @@ const start = async () => {
     const inputArea = document.getElementsByClassName('input-area')[0];
     const outputBox = document.getElementsByClassName('output')[0];
 
-    goButton.addEventListener("click", async () => {
-        inputArea.classList.add('hidden')
+    goButton.addEventListener("click", async e => {
+        e.preventDefault()
         const list = listInput.value.trim().split('\n')
         const listWithoutBlanks = list.filter((item) => item !== '')
+
+        if (listWithoutBlanks.length < 2) {
+            const errorArea = document.getElementsByClassName('list-input-error')[0];
+            errorArea.classList.remove('hidden')
+            errorArea.innerHTML = 'Please input at least two items'
+
+            return
+        }
+
+        inputArea.classList.add('hidden')
+
         originalList = listWithoutBlanks
         setOriginalList(originalList)
 
