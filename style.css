@@ -16,6 +16,7 @@ body {
   max-width: 1020px;
   text-align: left;
   display: inline-block;
+  width: 100%;
 }
 
 .answer {
@@ -46,6 +47,11 @@ body {
 .options-input:focus {
   outline: 1px solid black;
   outline-offset: 0px
+}
+
+.list-input-error {
+  border-left: 4px red solid;
+  padding: 10px;
 }
 
 .hint {
