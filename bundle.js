@@ -58,7 +58,7 @@ const start = async () => {
         if (listWithoutBlanks.length < 2) {
             const errorArea = document.getElementsByClassName('list-input-error')[0];
             errorArea.classList.remove('hidden')
-            errorArea.innerHTML = 'Please input at least two items'
+            errorArea.innerHTML = 'Enter two or more items, with one item per line'
 
             return
         }
