@@ -81,6 +81,9 @@ const start = async () => {
             }
         } while(!finished)
 
+        const progressBarArea = document.getElementsByClassName('progress-bar')[0];
+        progressBarArea.classList.add('hidden')
+
         undoButton.classList.add('hidden')
         questionBox.innerHTML = "";
 

@@ -78,3 +78,16 @@ body {
 .selection-area {
   height: 40px;
 }
+
+.progress-bar {
+  width: 100%;
+  background-color: #DDD;
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.bar {
+  width: 0%;
+  height: 30px;
+  background-color: #4CAF50;
+}
