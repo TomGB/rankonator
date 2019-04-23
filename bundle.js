@@ -82,6 +82,9 @@ const start = async () => {
             }
         } while(!finished)
 
+        const progressBarArea = document.getElementsByClassName('progress-bar')[0];
+        progressBarArea.classList.add('hidden')
+
         undoButton.classList.add('hidden')
         questionBox.innerHTML = "";
 
@@ -94,6 +97,8 @@ window.onload = start
 },{"./askUser":2,"./bookmarkButton":3,"./quickSort":4}],2:[function(require,module,exports){
 const undoButton = document.getElementsByClassName('undo')[0];
 const questionBox = document.getElementsByClassName('question')[0];
+const progressBarArea = document.getElementsByClassName('progress-bar')[0];
+const progressBar = document.getElementsByClassName('bar')[0];
 
 const outputBox = document.getElementsByClassName('output')[0];
 const selectionArea = document.getElementsByClassName('selection-area')[0];
@@ -176,9 +181,13 @@ const askUser = (item, pivot) => new Promise((resolve, reject) => {
 
     const { answerOne, answerTwo } = updateDom(item, pivot)
 
-    const progressBar = document.createElement("p")
-    progressBar.appendChild(document.createTextNode(`Estimated progress: ${userActions.length} / ${average(originalList.length)}`));
-    questionBox.appendChild(progressBar)
+    progressBarArea.classList.remove('hidden')
+
+    const rawPercent = userActions.length / average(originalList.length) * 100
+
+    const percent = rawPercent <= 100 ? rawPercent : 100
+
+    progressBar.style.width = percent + '%'
 
     const a1ClickListener = () => {
         userActions.push(true)
