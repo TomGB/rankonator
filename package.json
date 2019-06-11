@@ -8,17 +8,18 @@
     "watch": "watchify src/app.js -o public/bundle.js",
     "deploy": "yarn build && git subtree push --prefix public origin gh-pages",
     "trello:build": "browserify trello/app.js | squash > trello/bundle.js && ./trello/build.js",
-    "serve": "serve ./public"
+    "dev": "browser-sync start -f ./public/* --ss ./public/* --no-notify --port 9000"
   },
   "author": "Tom Banister",
   "license": "ISC",
   "devDependencies": {
+    "browser-sync": "^2.26.5",
     "browserify": "^16.2.3",
     "butternut": "^0.4.6",
     "qs": "^6.7.0",
+    "serve": "^11.0.0",
     "uglify-js": "^3.5.4",
     "watchify": "^3.11.1",
-    "yarn": "^1.15.2",
-    "serve": "^11.0.0"
+    "yarn": "^1.15.2"
   }
 }

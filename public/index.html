@@ -1,50 +1,58 @@
-<link rel="stylesheet" type="text/css" href='./style.css' />
-<script src='./bundle.js'></script>
-<div class='main'>
-  <h1>The Rankonator</h1>
-  <section class='input-area'>
-    <p>
-      If you've ever found yourself ranking a list of options by hand,
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+</head>
+<body>
+  <link rel="stylesheet" type="text/css" href='./style.css' />
+  <script src='./bundle.js'></script>
+  <div class='main'>
+    <h1>The Rankonator</h1>
+    <section class='input-area'>
+      <p>
+        If you've ever found yourself ranking a list of options by hand,
+        <br>
+        you'll probably have done it by making a torturous string of
+        decisions comparing the importance of each item against the others.
+        <br>
+        The Rankonator will break down prioritisation into individual decisions, so there's less to hold in your head at once.
+        <br>
+        If you're ranking in your head, you're probably using something like an
+        <a href='https://www.toptal.com/developers/sorting-algorithms' target='_blank'>insertion or selection algorithm</a>.
+        <br>
+        The Rankonator uses the QuickSort algorithm, which should reduce the number of choices you have to make.
+      </p>
+      <section class='integration-area'></section>
+      <label for='list-input'>Items to be ranked<br><p class='hint'>Put one item per line</p></label>
+      <p class='list-input-error hidden'></p>
+      <textarea class='options-input' id='list-input'></textarea>
       <br>
-      you'll probably have done it by making a torturous string of
-      decisions comparing the importance of each item against the others.
       <br>
-      The Rankonator will break down prioritisation into individual decisions, so there's less to hold in your head at once.
+      <button class='go button'>Rank</button>
+      <h3>Copying from Trello</h3>
+      <p>
+        To copy a list of items to rank from Trello, you can use a bookmarklet.
+        <br>
+        This is a small script that you save to your browser bookmarks.
+        <br>
+        To use the bookmarklet, open the Trello board you want to copy from and click the bookmark you created.
+      </p>
+      <p>Drag this link to your bookmarks bar</p>
+      <p>Then on a Trello board click the bookmark</p>
+      <a class='trello-bookmark'>Trello Sort</a>
       <br>
-      If you're ranking in your head, you're probably using something like an
-      <a href='https://www.toptal.com/developers/sorting-algorithms' target='_blank'>insertion or selection algorithm</a>.
       <br>
-      The Rankonator uses the QuickSort algorithm, which should reduce the number of choices you have to make.
-    </p>
-    <section class='integration-area'></section>
-    <label for='list-input'>Items to be ranked<br><p class='hint'>Put one item per line</p></label>
-    <p class='list-input-error hidden'></p>
-    <textarea class='options-input' id='list-input'></textarea>
-    <br>
-    <br>
-    <button class='go button'>Rank</button>
-    <h3>Copying from Trello</h3>
-    <p>
-      To copy a list of items to rank from Trello, you can use a bookmarklet.
-      <br>
-      This is a small script that you save to your browser bookmarks.
-      <br>
-      To use the bookmarklet, open the Trello board you want to copy from and click the bookmark you created.
-    </p>
-    <p>Drag this link to your bookmarks bar</p>
-    <p>Then on a Trello board click the bookmark</p>
-    <a class='trello-bookmark'>Trello Sort</a>
-    <br>
-    <br>
-    <button class='trello-bookmark-copy button'>Copy the bookmarklet script</button>
-    <p class='clipboard-message hidden'>Copied! Now paste the script as the URL of a new bookmark</p>
-  </section>
-  <section class='selection-area'>
-    <button class='undo button hidden'>undo</button>
-  </section>
-  <div class='question'></div>
-  <div class='progress-bar hidden'>
-    <div class='bar'></div>
+      <button class='trello-bookmark-copy button'>Copy the bookmarklet script</button>
+      <p class='clipboard-message hidden'>Copied! Now paste the script as the URL of a new bookmark</p>
+    </section>
+    <section class='selection-area'>
+      <button class='undo button hidden'>undo</button>
+    </section>
+    <div class='question'></div>
+    <div class='progress-bar hidden'>
+      <div class='bar'></div>
+    </div>
+    <div class='output'></div>
   </div>
-  <div class='output'></div>
-</div>
+  <script id="__bs_script__">//<![CDATA[
+    document.write("<script async src='http://localhost:9000/browser-sync/browser-sync-client.js?v=2.26.5'><\/script>".replace("HOST", location.hostname));
+//]]></script>
+</body>
