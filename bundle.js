@@ -140,7 +140,6 @@ undoButton.addEventListener("click", async () => {
 
 window.onpopstate = () => {
     if (undoListener.undoEnabled) {
-        // history.go(1);
         undoListener.cb();
     }
 };
