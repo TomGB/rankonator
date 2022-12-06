@@ -16,7 +16,7 @@
     "browser-sync": "^2.26.5",
     "browserify": "^16.2.3",
     "butternut": "^0.4.6",
-    "qs": "^6.7.0",
+    "qs": "^6.7.3",
     "serve": "^11.0.0",
     "uglify-js": "^3.5.4",
     "watchify": "^3.11.1",
